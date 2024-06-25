@@ -3,24 +3,21 @@
  |    employees   |
  ==================
  */
-CREATE TABLE employees
-( employee_id    INTEGER
-    , first_name     VARCHAR(20)
-    , last_name      VARCHAR(25) NOT NULL
-    , email          VARCHAR(25) NOT NULL
-    , phone_number   VARCHAR(20)
-    , hire_date      TIMESTAMP  NOT NULL
-    , job_id         VARCHAR(10) NOT NULL
-    , salary         NUMERIC(8,2)
-    , commission_pct NUMERIC(2,2)
-    , manager_id     INTEGER
-    , department_id  INTEGER
-    , CONSTRAINT     emp_salary_min  CHECK (salary > 0)
+DROP TABLE IF EXISTS employees;
+CREATE TABLE employees (
+    emp_no int,
+    birth_date date,
+    first_name varchar(14),
+    last_name varchar(16),
+    gender character(1),
+    hire_date date,
+    dept_no varchar(5),
+    from_date date
 );
 
-COPY employees (employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id)
-    FROM '/var/lib/postgresql/data/data1/employees.csv'
-    DELIMITER ';'
+COPY employees (emp_no, birth_date, first_name, last_name, gender, hire_date, dept_no, from_date)
+    FROM '/var/lib/postgresql/data/data2/employees.csv'
+    DELIMITER ','
     CSV HEADER;
 
 /*
@@ -30,27 +27,25 @@ COPY employees (employee_id, first_name, last_name, email, phone_number, hire_da
  */
 -- DROP TABLE employees1;
 CREATE TABLE employees1 (
-    employee_id INT NOT NULL,
-    first_name VARCHAR(11),
-    last_name VARCHAR(11),
-    email VARCHAR(255),
-    phone_number VARCHAR(18),
-    hire_date TIMESTAMP,
-    job_id VARCHAR(10),
-    salary NUMERIC(8,2),
-    commission_pct NUMERIC(2,2),
-    manager_id INT,
-    department_id iNT
+    emp_no int,
+    birth_date date,
+    first_name varchar(14),
+    last_name varchar(16),
+    gender character(1),
+    hire_date date,
+    dept_no varchar(5),
+    from_date date
 )
-PARTITION BY LIST (department_id);
+PARTITION BY LIST (dept_no);
 
-CREATE TABLE employess1_dpt50 PARTITION OF employees1 FOR VALUES IN (50);
-CREATE TABLE employess1_dpt80 PARTITION OF employees1 FOR VALUES IN (80);
-CREATE TABLE employess1_dpt100 PARTITION OF employees1 FOR VALUES IN (100);
+CREATE TABLE employees1_d004 PARTITION OF employees1 FOR VALUES IN ('d004');
+CREATE TABLE employees1_d005 PARTITION OF employees1 FOR VALUES IN ('d005');
+CREATE TABLE employees1_d007 PARTITION OF employees1 FOR VALUES IN ('d007');
+CREATE TABLE employees1_default PARTITION OF employees1 DEFAULT;
 
-COPY employees1 (employee_id, first_name, last_name, email, phone_number, hire_date, job_id, salary, commission_pct, manager_id, department_id)
-FROM '/var/lib/postgresql/data/data1/employees.csv'
-DELIMITER ';'
+COPY employees1
+FROM '/var/lib/postgresql/data/data2/employees.csv'
+DELIMITER ','
 CSV HEADER;
 
 /*
@@ -63,21 +58,21 @@ VACUUM ANALYSE;
 
 -- dept 50
 EXPLAIN ANALYSE
-SELECT * FROM employees WHERE department_id = 50;
+SELECT * FROM employees WHERE dept_no = 'd004';
 
 EXPLAIN ANALYSE
-SELECT * FROM employees1 WHERE department_id = 50;
+SELECT * FROM employees1 WHERE dept_no = 'd004';
 
 -- dept 80
 EXPLAIN ANALYSE
-SELECT * FROM employees WHERE department_id = 80;
+SELECT * FROM employees WHERE dept_no = 'd005';
 
 EXPLAIN ANALYSE
-SELECT * FROM employees1 WHERE department_id = 80;
+SELECT * FROM employees1 WHERE dept_no = 'd005';
 
 -- dept 100
 EXPLAIN ANALYSE
-SELECT * FROM employees WHERE department_id = 100;
+SELECT * FROM employees WHERE dept_no = 'd007';
 
 EXPLAIN ANALYSE
-SELECT * FROM employees1 WHERE department_id = 100;
+SELECT * FROM employees1 WHERE dept_no = 'd007';
