@@ -73,9 +73,9 @@ EXPLAIN ANALYSE
 SELECT * FROM employees2 WHERE date_part('year', hire_date) > 1995;
 
 /*
- =======================
- | queries (with index) |
- =======================
+ ==================
+ |   employees4   |
+ ==================
  */
 CREATE TABLE employees4 (
     emp_no int,
@@ -98,6 +98,11 @@ COPY employees4 (emp_no, birth_date, first_name, last_name, gender, hire_date, d
     DELIMITER ','
     CSV HEADER;
 
+/*
+ =======================
+ | queries (with index) |
+ =======================
+ */
 CREATE INDEX IF NOT EXISTS employees_hire_year_idx ON employees USING btree (hire_date);
 CREATE INDEX IF NOT EXISTS employees4_hire_year_idx ON employees4 USING btree (hire_date);
 
