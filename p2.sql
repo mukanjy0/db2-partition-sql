@@ -25,7 +25,7 @@ COPY employees (emp_no, birth_date, first_name, last_name, gender, hire_date, de
  |   employees2   |
  ==================
  */
--- DROP TABLE employees2;
+DROP TABLE IF EXISTS employees2;
 CREATE TABLE employees2 (
     emp_no int,
     birth_date date,
@@ -103,8 +103,8 @@ COPY employees4 (emp_no, birth_date, first_name, last_name, gender, hire_date, d
  | queries (with index) |
  =======================
  */
-CREATE INDEX IF NOT EXISTS employees_hire_year_idx ON employees USING btree (hire_date);
-CREATE INDEX IF NOT EXISTS employees4_hire_year_idx ON employees4 USING btree (hire_date);
+CREATE INDEX IF NOT EXISTS employees_idx_hire_date ON employees USING btree (hire_date);
+CREATE INDEX IF NOT EXISTS employees4_idx_hire_date ON employees4 USING btree (hire_date);
 
 VACUUM ANALYSE;
 

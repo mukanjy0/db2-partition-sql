@@ -25,7 +25,7 @@ COPY employees (emp_no, birth_date, first_name, last_name, gender, hire_date, de
  |   employees1   |
  ==================
  */
--- DROP TABLE employees1;
+DROP TABLE IF EXISTS employees1;
 CREATE TABLE employees1 (
     emp_no int,
     birth_date date,
